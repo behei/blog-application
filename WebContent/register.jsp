@@ -14,6 +14,7 @@ if (user.length() <= 6) {
 	response.sendRedirect("index.jsp?error=3");
 }
 String pass = request.getParameter( "pass" );
+String email = request.getParameter("email");
 String passCopy = request.getParameter("passCopy");
 String remoteAddr = request.getRemoteAddr();
 ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
@@ -39,15 +40,19 @@ else {
 		
 		if (user.equals("administrator")) {
 			//this has PreparedStatement to not have SQL injection attack
-			String sqlStr = "INSERT INTO registered_users(name, username, password, isAdmin) VALUE (?, ?, ?, ?)";
+			String sqlStr = "INSERT INTO registered_users(name, username, password, isAdmin) VALUE (?, ?, ?, ?, ?)";
 			isAdmin = 1;
 			PreparedStatement stmt = con.prepareStatement(sqlStr);
 			stmt.setString(1, fullname);
 			stmt.setString(2, user);
 			stmt.setString(3, hashedPassword);
 			stmt.setInt(4, isAdmin);
+			stmt.setString(5, email);
 			try {
 				int rs = stmt.executeUpdate();
+				Cookie cookiePage = new Cookie("lastPage", "/register");
+				cookiePage.setMaxAge(60*60);
+				response.addCookie(cookiePage);
 				response.sendRedirect("login_page.jsp");
 			}
 			catch (SQLException ex) {
@@ -58,14 +63,18 @@ else {
 		
 		else {
 		// this statement has a potential for SQL injection attack 
-			String sqlStr = "INSERT INTO registered_users(name, username, password, isAdmin, email) VALUES ('" + fullname + "', '" + user + "', '" + hashedPassword + "', '" + isAdmin + "' )";
+			String sqlStr = "INSERT INTO registered_users(name, username, password, isAdmin, email) VALUES ('" + fullname + "', '" + user + "', '" + hashedPassword + "', '" + isAdmin + "', '"+ email + "')";
 			Statement stmt = con.createStatement();
-			try {
+			/* try { */
 				boolean result = stmt.execute(sqlStr);
-			}
+				Cookie cookiePage = new Cookie("lastPage", "/register");
+				cookiePage.setMaxAge(60*60);
+				response.addCookie(cookiePage);
+				response.sendRedirect("login_page.jsp");
+			/* }
 			catch (SQLException ex) {
-				response.sendRedirect("index.jsp?error=1");
-			}
+				out.print(ex);
+			} */
 		//out.println(password.hashPassword(pass));
 		}
 	}

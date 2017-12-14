@@ -1,5 +1,7 @@
 <%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
 <%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
+<%@include file="connection.jsp" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,20 +10,69 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<style>
+	body { font-family: 'Montserrat', sans-serif; }
+</style>
 </head>
-<body>
+<body> 
 	<div class="container">
 	<div class="column">
+		
+		<%
+	String cookie = "";
+	String cookieLastPage = "";
+	Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for(int i = 0; i < cookies.length; i++) { 
+    				Cookie c = cookies[i];
+    				if (c.getName().equals("loginTime")) {
+    					cookie = java.net.URLDecoder.decode(c.getValue(), "UTF-8");
+    		
+   				 }
+    				if (c.getName().equals("lastPage")) {
+    					cookieLastPage = c.getValue();
+    				}
+			}  
+		}
+	 %>
+		<div style="text-align: center;"><% if(!cookie.equals("")) out.print("<div style=\"font-family: 'Montserrat', sans-serif; font-size: 48px;\"> Welcome back! Your last login time was " + cookie + "</div>"); else out.print("<div style=\"font-family: 'Montserrat', sans-serif; font-size:42px;\"> Welcome to Information Security Blog Application</div>");  %></div>
 		<hr>
+		
+		<%
+			//String testString = "this text in the database is vulnerable";
+			String sqlStr = "select url,text from vulnerable where id='" + request.getParameter("id") + "'";
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sqlStr);
+			String vulnerableText = "";
+			if(rs.next()) {
+				out.print(rs.getString(1));
+			}
 
+		%>
+		
+		<strong style="color: red;">
+		<% if (vulnerableText != null) {
+			out.print("    " + vulnerableText);
+			}
+		 %>
+		 </strong>
 		<!-- <img src="http://www.myvalleynational.com/security-wordcloud.jpg" class="img-fluid" alt="Responsive image"> -->
-		
-		<div class="alert alert-danger">
- 			<strong>Danger!</strong> This page has SQL injection vulnerability because PreparedStatements are not used.
-		</div>
-		
-		<div class="alert alert-info">
-  			<strong>Info!</strong> To create admin account, use login "administrator" name with password of your choice.
+		<div class="row">
+			<div class="alert alert-danger col-md-3">
+	 			<strong>Danger!</strong> This page has SQL injection vulnerability because PreparedStatements are not used.
+			</div>
+			
+			<div class="alert alert-info col-md-3">
+	  			<strong>Info!</strong> To create admin account, use login "administrator" name with password of your choice.
+			</div>
+			
+			<div class="alert alert-info col-md-3">
+						<div>Attention! This website uses BCrypt library to encrypt (hash + salt) your password. If you'd like to play with it, visit <a href="encrypting.jsp">here</a></div>
+					</div>
+			<div class="alert alert-danger col-md-3">
+	  			<strong>Info!</strong> Some of the OWASP attacks can be demonstrated <a href="/demonstration.jsp">here</a>
+			</div>
 		</div>
 		<!-- <h2>The Awesome Web Security Blog. Sign up now!</h2> -->
 		<form class="form-horizontal" action="register.jsp">
@@ -78,6 +129,7 @@
 						<span class="help-block"> </span>
 					</div>
 					
+					
 				</div>
 				
 				<div class="form-group">
@@ -114,20 +166,15 @@
 				<div class="form-group">
   					<label class="col-md-4 control-label" for="singlebutton"></label>
   					<div class="col-md-12">
-    						<button id="singlebutton" name="singlebutton" class="btn btn-primary">Submit</button>
+    						<button id="singlebutton" name="singlebutton" class="btn btn-primary mr-2">Submit</button>
+    						Already registered? <a href="login_page.jsp">Log in here</a>
     						<!-- <button class="btn btn-secondary" onclick="location.href = 'login_page.html'">Log in</button> -->
   					</div>
   					
 				</div>		
 			</fieldset>
 			</form>
-			<div>
-				
-				<div class="alert alert-info">
-					Already registered? <a href="login_page.jsp">Log in here</a>
-					Forgot password? Reset it <a href="">here</a>
-				</div>
-			</div>
+			
 	</div>
 	</div>
 </body>

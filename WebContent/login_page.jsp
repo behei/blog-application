@@ -8,13 +8,24 @@
 </head>
 <body>
 <hr>
-<div class="container">
+<% 
+	String cookieLastPage = "";
+	Cookie[] cookies = request.getCookies();
+	for(int i = 0; i < cookies.length; i++) { 
+	Cookie c = cookies[i];
+	if (c.getName().equals("lastPage")) {
+		cookieLastPage = c.getValue();
+	}
+}
+	
+%><div style="text-align: center;"><% if (!cookieLastPage.equals("")) out.print("Your last visited page was " + cookieLastPage + ". Because we do not care about the index page!"); %></div>
+<div class="container mt-3">
 	<div class="column">
 		<form class="form-horizontal" action="login.jsp">
 			<fieldset>
 				<% 
 					if (request.getParameter("error") != null && Integer.parseInt(request.getParameter("error")) == 1) {
-						out.print("<div class=" + "alert alert-danger" + "> <strong>Password is incorrect</strong> </div>");	
+						out.print("<div class=" + "alert alert-danger" + "> <strong>Your username and/or password is incorrect</strong> </div>");	
 						}
 					
 				%>
@@ -29,8 +40,8 @@
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="singlebutton"> </label>
 				  	<div class="col-md-4">
-				    		<button id="singlebutton" name="singlebutton" class="btn btn-primary">Submit</button>
-				    		<button id="resetbutton" name="resetbutton" class="btn btn-secondary">Reset password</button>
+				    		<button id="singlebutton" name="singlebutton" class="btn btn-primary mr-3">Submit</button>
+				    		<a href="/index.jsp" id="resetbutton" name="resetbutton" >Back to home page</a>
 				  	</div>
 				  	
 				</div>

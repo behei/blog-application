@@ -1,6 +1,7 @@
 <%@include file="connection.jsp" %>
 <%@ page import="encryption.Password" %>
 <%@ page import="java.util.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%
 
 //Check user
@@ -29,9 +30,15 @@ if (result.next()) {
 		if ( rs.next() ) {
 			//Locale locale = request.getLocale();
 			//java.text.DateFormat dateFormat = java.text.DateFormat.getDateTimeInstance( java.text.DateFormat.LONG, java.text.DateFormat.LONG, locale);
+			java.util.Date date = new java.util.Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String dateStr = sdf.format(date);
 			Cookie cookie = new Cookie("loginTime", java.net.URLEncoder.encode(new java.util.Date().toString(), "UTF-8"));//java.net.URLEncoder.encode(new java.util.Date().toString(), "UTF-8"));
 			cookie.setMaxAge(60*60);
 			response.addCookie(cookie);
+			Cookie cookiePage = new Cookie("lastPage", "/login");
+			cookiePage.setMaxAge(60*60);
+			response.addCookie(cookiePage);
 			session.setAttribute( "user", user );
 			session.setAttribute( "username", rs.getString(1));
 			session.setAttribute("admin", rs.getString(2));

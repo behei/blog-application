@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Possible XSS Defenses</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Montserrat" rel="stylesheet">
+<link href="./style_defense.css" rel="stylesheet">
+<link rel="shortcut icon" href="/favicon2.ico" type="image/x-icon">
+<link rel="icon" href="/favicon2.ico" type="image/x-icon">
+</head>
+<body>
+<div class="mt-2 mb-3" style="text-align:center;"><h1 class="new-font">XSS Prevention Rules</h1></div>
+<div class="ml-3 mr-3 new-font-body">
+	The following rules are intended to prevent all XSS in your application. While these rules do not allow absolute freedom in putting untrusted data into an HTML document, they should cover the vast majority of common use cases. You do not have to allow all the rules in your organization. Many organizations may find that allowing only Rule #1 and Rule #2 are sufficient for their needs. 
+
+Do NOT simply escape the list of example characters provided in the various rules. It is NOT sufficient to escape only that list. Blacklist approaches are quite fragile. The whitelist rules here have been carefully designed to provide protection even against future vulnerabilities introduced by browser changes.
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Rule #0</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+The first rule is to deny all - don't put untrusted data into your HTML document unless it is within one of the slots defined in Rule #1 through Rule #5. The reason for Rule #0 is that there are so many strange contexts within HTML that the list of escaping rules gets very complicated. We can't think of any good reason to put untrusted data in these contexts. This includes "nested contexts" like a URL inside a javascript -- the encoding rules for those locations are tricky and dangerous. If you insist on putting untrusted data into nested contexts, please do a lot of cross-browser testing and let us know what you find out.
+</div>
+<div class="container">
+	<div class="row">
+		    <div class="container">
+	            <blockquote class="quote-card">
+	              <p>
+	                 &lt;script>...never put untrusted data here...&lt;/script>  
+	              </p>
+ 				 <p>
+ 					&lt;!--...never put untrusted data here...-->            
+ 					</p>
+ 				<p>
+ 					&lt;div ...never put untrusted data here...=test />    
+ 			   </p>
+ 				<p>
+ 					&lt;never put untrusted data here... href="/test" />   
+ 				</p>
+ 				<p>
+ 					&lt;style>...never put untrusted data here...&lt;/style>   
+	              </p>
+	        
+	              <!-- <cite>
+	                Lorem I psum
+	              </cite> -->
+	            </blockquote>
+	       
+	        </div>
+		</div>
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Rule #1</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+	Rule #1 is for when you want to put untrusted data directly into the HTML body somewhere. This includes inside normal tags like div, p, b, td, etc. Most web frameworks have a method for HTML escaping for the characters detailed below. However, this is absolutely not sufficient for other HTML contexts. You need to implement the other rules detailed here as well.
+</div>
+<div class="container">
+	<div class="row">
+		    <div class="container">
+	            <blockquote class="quote-card blue-card">
+	              <p>
+	                 &lt;body>escape untrusted data before putting here&lt;/body>
+	              </p>
+ 				 <p>
+ 					&lt;div>escape untrusted data before putting here&lt;/div>     
+ 					</p>
+ 				<p>
+ 					any other normal HTML elements  
+ 			   </p>
+
+	            </blockquote>
+	       
+	        </div>
+		</div>
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Rule #2</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+Rule #2 is for putting untrusted data into typical attribute values like width, name, value, etc. This should not be used for complex attributes like href, src, style, or any of the event handlers like onmouseover. It is extremely important that event handler attributes should follow Rule #3 for HTML JavaScript Data Values.
+</div>
+<div class="container">
+	<div class="row">
+		    <div class="container">
+	            <blockquote class="quote-card red-card">
+	              <p>
+	                 &lt;div attr=escape untrusted data before putting here>content&lt;/div>
+	              </p>
+ 				 <p>
+ 					&lt;div attr='escape untrusted data before putting here'>content&lt;/div>    
+ 					</p>
+	            </blockquote>
+	       
+	        </div>
+		</div>
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Rule #3</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+	Rule #3 concerns dynamically generated JavaScript code - both script blocks and event-handler attributes. The only safe place to put untrusted data into this code is inside a quoted "data value." Including untrusted data inside any other JavaScript context is quite dangerous, as it is extremely easy to switch into an execution context with characters including (but not limited to) semi-colon, equals, space, plus, and many more, so use with caution.
+</div>
+<div class="container">
+	<div class="row">
+		    <div class="container">
+	            <blockquote class="quote-card green-card">
+	              <p>
+	                 &lt;script>alert('escape untrusted data before putting here')&lt;/script>
+	              </p>
+ 				 <p>
+ 					&lt;script>x='escape untrusted data before putting here'&lt;/script>  
+ 					</p>
+	            </blockquote>
+	       
+	        </div>
+		</div>
+</div>
+</body>
+</html>
