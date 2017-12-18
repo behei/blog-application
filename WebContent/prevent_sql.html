@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Possible SQL Defenses</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Montserrat" rel="stylesheet">
+<link href="./style_defense.css" rel="stylesheet">
+<link rel="shortcut icon" href="/favicon2.ico" type="image/x-icon">
+<link rel="icon" href="/favicon2.ico" type="image/x-icon">
+</head>
+<body>
+<div class="mt-2 mb-3" style="text-align:center;"><h1 class="new-font">SQL Injection Prevention</h1></div>
+<div class="ml-3 mr-3 new-font-body">
+SQL Injection flaws are introduced when software developers create dynamic database queries that include user supplied input. To avoid SQL injection flaws is simple. Developers need to either: a) stop writing dynamic queries; and/or b) prevent user supplied input which contains malicious SQL from affecting the logic of the executed query.
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Option #1: Use of Prepared Statements</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+The use of prepared statements with variable binding (aka parameterized queries) is how all developers should first be taught how to write database queries. They are simple to write, and easier to understand than dynamic queries. Parameterized queries force the developer to first define all the SQL code, and then pass in each parameter to the query later. This coding style allows the database to distinguish between code and data, regardless of what user input is supplied.
+
+Prepared statements ensure that an attacker is not able to change the intent of a query, even if SQL commands are inserted by an attacker. In the safe example below, if an attacker were to enter the userID of tom' or '1'='1, the parameterized query would not be vulnerable and would instead look for a username which literally matched the entire string tom' or '1'='1.
+</div>
+<div class="mt-2 b-3" style="text-align:center;"><h3 class="new-font">Safe Java Prepared Example</h3></div>
+<div class="row">
+<div class="col" style="margin-left: 550px;">
+	<blockquote style="text-align: center;" class="imgur-embed-pub" lang="en" data-id="16kbHkU"><a href="//imgur.com/16kbHkU">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+</div>
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Option #2: Stored Procedures</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+Stored procedures are not always safe from SQL injection. However, certain standard stored procedure programming constructs have the same effect as the use of parameterized queries when implemented safely* which is the norm for most stored procedure languages. They require the developer to just build SQL statements with parameters which are automatically parameterized unless the developer does something largely out of the norm. The difference between prepared statements and stored procedures is that the SQL code for a stored procedure is defined and stored in the database itself, and then called from the application. Both of these techniques have the same effectiveness in preventing SQL injection so your organization should choose which approach makes the most sense for you.
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Option #3: White List Input Validation</h2></div>
+<div class="ml-3 mr-3 new-font-body">
+Various parts of SQL queries aren't legal locations for the use of bind variables, such as the names of tables or columns, and the sort order indicator (ASC or DESC). In such situations, input validation or query redesign is the most appropriate defense. For the names of tables or columns, ideally those values come from the code, and not from user parameters. But if user parameter values are used to make different for table names and column names, then the parameter values should be mapped to the legal/expected table or column names to make sure unvalidated user input doesn't end up in the query. Please note, this is a symptom of poor design and a full re-write should be considered if time allows. Here is an example of table name validation.
+</div>
+<div class="mt-2 mb-3" style="text-align:center;"><h2 class="new-font">Option #4: Escaping All User-Supplied Input</h2></div>
+<div class="ml-3 mr-3 mb-5 new-font-body">
+This technique should only be used as a last resort, when none of the above are feasible. Input validation is probably a better choice as this methodology is frail compared to other defenses and we cannot guarantee it will prevent all SQL Injection in all situations.
+
+This technique is to escape user input before putting it in a query. It is very database specific in its implementation. It's usually only recommended to retrofit legacy code when implementing input validation isn't cost effective. Applications built from scratch, or applications requiring low risk tolerance should be built or re-written using parameterized queries, stored procedures, or some kind of Object Relational Mapper (ORM) that builds your queries for you.
+</div>
+<div style="text-align: center;" class="mb-5"><a href="index.jsp">return to the home page</a></div>
+</body>
+</html>

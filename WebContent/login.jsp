@@ -34,10 +34,10 @@ if (result.next()) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateStr = sdf.format(date);
 			Cookie cookie = new Cookie("loginTime", java.net.URLEncoder.encode(new java.util.Date().toString(), "UTF-8"));//java.net.URLEncoder.encode(new java.util.Date().toString(), "UTF-8"));
-			cookie.setMaxAge(60*60);
+			cookie.setMaxAge(60*60*48);
 			response.addCookie(cookie);
 			Cookie cookiePage = new Cookie("lastPage", "/login");
-			cookiePage.setMaxAge(60*60);
+			cookiePage.setMaxAge(60*60*48);
 			response.addCookie(cookiePage);
 			session.setAttribute( "user", user );
 			session.setAttribute( "username", rs.getString(1));

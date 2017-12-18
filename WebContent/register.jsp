@@ -40,7 +40,7 @@ else {
 		
 		if (user.equals("administrator")) {
 			//this has PreparedStatement to not have SQL injection attack
-			String sqlStr = "INSERT INTO registered_users(name, username, password, isAdmin) VALUE (?, ?, ?, ?, ?)";
+			String sqlStr = "INSERT INTO registered_users(name, username, password, isAdmin, email) VALUES (?, ?, ?, ?, ?)";
 			isAdmin = 1;
 			PreparedStatement stmt = con.prepareStatement(sqlStr);
 			stmt.setString(1, fullname);
@@ -56,6 +56,7 @@ else {
 				response.sendRedirect("login_page.jsp");
 			}
 			catch (SQLException ex) {
+				//out.print("I already exist!");
 				response.sendRedirect("index.jsp?error=1");
 			}
 			

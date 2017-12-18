@@ -28,6 +28,13 @@ ResultSet rs = stmt.executeQuery();
 <style>
 	body { font-family: 'Montserrat', sans-serif; }
 	.new-font { font-family: 'Josefin Sans', sans-serif;}
+	#share-buttons img {
+		width: 35px;
+		padding: 5px;
+		border: 0;
+		box-shadow: 0;
+		display: inline;
+	}
 </style>
 </head>
 <body>
@@ -45,7 +52,7 @@ ResultSet rs = stmt.executeQuery();
     }
 }  
 	 %>
-<h1 class="ml-3">The Security Blog Application <span style="float:right"> Welcome <%= username %> &nbsp;&nbsp;&nbsp;&nbsp;<a type="submit" href="logout_action.jsp" title="Click on it to kill the user session">logout</a></form> &nbsp;&nbsp;&nbsp;&nbsp;</span></h1>
+<h1 class="ml-3">The Security Blog Application <span style="float:right"> Welcome <%= username %> &nbsp;&nbsp;&nbsp;&nbsp;<a href="logout_action.jsp" title="Click on it to kill the user session">logout</a></form> &nbsp;&nbsp;&nbsp;&nbsp;</span></h1>
 <% if (!cookie.equals("")) out.print("<h2 class=\"ml-3\" style=\"font-size:18px;\">Your last visited page was " + cookie + "</h2>"); %>
 <!-- <div class="alert alert-info">
 	The statement above uses cookies to display the last visited page in the application (as well as all other pages in the application). 
@@ -94,10 +101,10 @@ Blog Title: <input name="blogtitle" size=100/><br>
 		<div class="card-body">
 			<form method="post" action="blog_action.jsp">
 				<div class="form-control">
-					Blog title: <input name="blogtitle" size=100/><br>
+					Blog title: <input name="blogtitle" rows="3" class="form-control" placeholder="Blog title" style="overflow-wrap:break-word;"/><br>
 				</div>
 				<div class="form-group">
-					<textarea name="blogcontent" class="form-control" rows="3" placeholder="Blog content"></textarea>
+					<textarea name="blogcontent" class="form-control" rows="3" placeholder="Blog content" style="overflow-wrap:break-word;"></textarea>
 				</div>
 				<button type="submit" class="btn btn-primary">Add entry</button>
 				<input type="hidden" name="csrftoken" value=<% out.print(csrf); %> />
@@ -105,6 +112,67 @@ Blog Title: <input name="blogtitle" size=100/><br>
 		</div>
 </div>
 
+<div class="mt-3 ml-3 mr-3 mb-3">
+	<h5 style="text-align: center;">Do you like this blog application? Tell your friends!</h5>
+	<div id="share-buttons" style="text-align: center;">
+	    <!-- Buffer -->
+    <a href="https://bufferapp.com/add?url=http://52.26.234.36/" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
+    </a>
+    
+    <!-- Digg -->
+    <a href="http://www.digg.com/submit?url=http://52.26.234.36/" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/diggit.png" alt="Digg" />
+    </a>
+    
+    <!-- Email -->
+    <a href="mailto:?Subject=Awesome Blog App&amp;Body=I%20saw%20this%20and%20thought%20of%20you!%20 http://52.26.234.36/">
+        <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" />
+    </a>
+ 
+    <!-- Facebook -->
+    <a href="http://www.facebook.com/sharer.php?u=http://52.26.234.36/" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
+    
+    <!-- Google+ -->
+    <a href="https://plus.google.com/share?url=http://52.26.234.36/" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+    </a>
+    
+    <!-- LinkedIn -->
+    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://52.26.234.36/" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+    </a>
+    
+    
+    <!-- Print -->
+    <a href="javascript:;" onclick="window.print()">
+        <img src="https://simplesharebuttons.com/images/somacro/print.png" alt="Print" />
+    </a>
+    
+    <!-- Reddit -->
+    <a href="http://reddit.com/submit?url=http://52.26.234.36/&amp;title=Security Blog App" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/reddit.png" alt="Reddit" />
+    </a>
+    
+    <!-- StumbleUpon-->
+    <a href="http://www.stumbleupon.com/submit?url=http://52.26.234.36/&amp;title=Security Blog App" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/stumbleupon.png" alt="StumbleUpon" />
+    </a>
+    
+    <!-- Tumblr-->
+    <a href="http://www.tumblr.com/share/link?url=http://52.26.234.36/&amp;title=Security Blog App" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/tumblr.png" alt="Tumblr" />
+    </a>
+     
+    <!-- Twitter -->
+    <a href="https://twitter.com/share?url=http://52.26.234.36/&amp;text=Security%20Blog%20Application&amp;hashtags=securityblogapp" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+    </a>
+    
+	</div>
+</div>
 <div class="ml-3 mr-3 mb-3">
 	Privacy statement: While using this site, you agree to accept cookie usage (we store last visited page and last login time) and privacy statement. Copyright by Mykhailo Behei, 2017. All Rights Reserved.
 </div>

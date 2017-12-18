@@ -18,7 +18,7 @@
 	}
 }
 	
-%><div style="text-align: center;"><% if (!cookieLastPage.equals("")) out.print("Your last visited page was " + cookieLastPage + ". Because we do not care about the index page!"); %></div>
+%><div style="text-align: center;"><% if (!cookieLastPage.equals("")) out.print("Your last visited page was " + cookieLastPage + ". We use cookies to remember when you visit pages like register, login and blog."); %></div>
 <div class="container mt-3">
 	<div class="column">
 		<form class="form-horizontal" action="login.jsp">
